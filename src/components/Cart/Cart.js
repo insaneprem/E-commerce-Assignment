@@ -1,22 +1,20 @@
 import React, { memo } from 'react';
-import { useCartContext } from '../../context/CartContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { removeItem, updateQuantity, selectCart, selectTotalItems, selectTotalPrice } from '../../store/cartSlice';
 import EmptyState from '../EmptyState/EmptyState';
 import styles from './Cart.module.css';
 
 const Cart = memo(() => {
-  const {
-    cart,
-    removeItem,
-    updateQuantity,
-    getTotalItems,
-    getTotalPrice,
-  } = useCartContext();
+  const dispatch = useDispatch();
+  const cart = useSelector(selectCart);
+  const totalItems = useSelector(selectTotalItems);
+  const totalPrice = useSelector(selectTotalPrice);
 
   const handleQuantityChange = (productId, newQuantity, maxStock) => {
     if (newQuantity <= 0) {
-      removeItem(productId);
+      dispatch(removeItem(productId));
     } else if (newQuantity <= maxStock) {
-      updateQuantity(productId, newQuantity);
+      dispatch(updateQuantity({ id: productId, quantity: newQuantity }));
     }
   };
 
@@ -66,7 +64,7 @@ const Cart = memo(() => {
               </div>
               <button
                 className={styles.removeButton}
-                onClick={() => removeItem(item.id)}
+                onClick={() => dispatch(removeItem(item.id))}
                 aria-label={`Remove ${item.title} from cart`}
               >
                 Remove
@@ -78,11 +76,11 @@ const Cart = memo(() => {
       <div className={styles.cartSummary}>
         <div className={styles.summaryRow}>
           <span>Total Items:</span>
-          <span className={styles.summaryValue}>{getTotalItems()}</span>
+          <span className={styles.summaryValue}>{totalItems}</span>
         </div>
         <div className={styles.summaryRow}>
           <span>Total Price:</span>
-          <span className={styles.summaryValue}>${getTotalPrice().toFixed(2)}</span>
+          <span className={styles.summaryValue}>${totalPrice.toFixed(2)}</span>
         </div>
       </div>
     </div>

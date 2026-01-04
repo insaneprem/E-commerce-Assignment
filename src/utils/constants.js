@@ -1,6 +1,5 @@
 export const API_ENDPOINTS = {
   DUMMY_JSON: 'https://dummyjson.com/products',
-  FAKE_STORE: 'https://fakestoreapi.com/products',
 };
 
 export const SORT_OPTIONS = {

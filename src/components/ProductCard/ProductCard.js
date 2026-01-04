@@ -1,11 +1,12 @@
 import React, { memo } from 'react';
-import { useCartContext } from '../../context/CartContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { addItem, selectCartItem } from '../../store/cartSlice';
 import { STOCK_STATUS } from '../../utils/constants';
 import styles from './ProductCard.module.css';
 
 const ProductCard = memo(({ product, onProductClick }) => {
-  const { addItem, getCartItem } = useCartContext();
-  const cartItem = getCartItem(product.id);
+  const dispatch = useDispatch();
+  const cartItem = useSelector(state => selectCartItem(state, product.id));
   const stock = product.stock || 0;
   const isInStock = stock > 0;
   const isOutOfStock = !isInStock;
@@ -13,13 +14,13 @@ const ProductCard = memo(({ product, onProductClick }) => {
   const handleAddToCart = (e) => {
     e.stopPropagation();
     if (isInStock) {
-      addItem({
+      dispatch(addItem({
         id: product.id,
         title: product.title || product.name,
         price: product.price,
         thumbnail: product.thumbnail || product.image,
         stock: stock,
-      });
+      }));
     }
   };
 

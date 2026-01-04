@@ -1,26 +1,26 @@
 import React, { memo } from 'react';
-import { useCartContext } from '../../context/CartContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { addItem, selectCartItem } from '../../store/cartSlice';
 import { STOCK_STATUS } from '../../utils/constants';
 import styles from './ProductModal.module.css';
 
 const ProductModal = memo(({ product, isOpen, onClose }) => {
-  const { addItem, getCartItem } = useCartContext();
+  const dispatch = useDispatch();
+  const cartItem = useSelector(state => selectCartItem(state, product.id));
 
   if (!isOpen || !product) return null;
-
-  const cartItem = getCartItem(product.id);
   const stock = product.stock || 0;
   const isInStock = stock > 0;
 
   const handleAddToCart = () => {
     if (isInStock) {
-      addItem({
+      dispatch(addItem({
         id: product.id,
         title: product.title || product.name,
         price: product.price,
         thumbnail: product.thumbnail || product.image,
         stock: stock,
-      });
+      }));
     }
   };
 

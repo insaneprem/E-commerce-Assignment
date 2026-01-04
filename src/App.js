@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
-import { CartProvider } from './context/CartContext';
+import { Provider } from 'react-redux';
+import { store } from './store/store';
 import { useProducts } from './hooks/useProducts';
 import { useFilters } from './hooks/useFilters';
 import ProductList from './components/ProductList/ProductList';
@@ -61,7 +62,7 @@ const App = () => {
   }
 
   return (
-    <CartProvider>
+    <Provider store={store}>
       <div className={styles.app}>
         <header className={styles.header}>
           <h1 className={styles.title}>Mini E-Commerce</h1>
@@ -93,7 +94,7 @@ const App = () => {
           />
         )}
       </div>
-    </CartProvider>
+    </Provider>
   );
 };
 
